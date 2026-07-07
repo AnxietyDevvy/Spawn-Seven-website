@@ -19,6 +19,7 @@
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#features">Features</a>
+      <a href="#poke-roll">Poke Roll</a>
       <a href="#links">Links</a>
       <a href="review.html">Leave a Review</a>
       <a href="https://discord.gg/yU9Uv5yzqP" class="btn btn-primary" target="_blank">Join Server</a>
@@ -82,6 +83,30 @@
     </div>
   </section>
 
+  <!-- POKEMON ROLL -->
+  <section id="poke-roll" class="section">
+    <div class="container">
+      <h2 class="section-title">Emoji Pokemon Roll</h2>
+      <p class="roll-subtitle">Click an emoji to roll a random Pokemon from that type. Use the Pokeball button for a fully random pick.</p>
+
+      <div class="emoji-buttons" role="group" aria-label="Pokemon type buttons">
+        <button class="emoji-btn" data-type="fire" aria-label="Fire type roll">🔥</button>
+        <button class="emoji-btn" data-type="water" aria-label="Water type roll">💧</button>
+        <button class="emoji-btn" data-type="grass" aria-label="Grass type roll">🌿</button>
+        <button class="emoji-btn" data-type="electric" aria-label="Electric type roll">⚡</button>
+        <button class="emoji-btn" data-type="ice" aria-label="Ice type roll">❄️</button>
+        <button class="emoji-btn" data-type="rock" aria-label="Rock type roll">🪨</button>
+        <button class="emoji-btn emoji-btn-ball" data-type="any" aria-label="Random Pokemon roll">⚪🔴</button>
+      </div>
+
+      <article class="roll-result" id="rollResult" aria-live="polite">
+        <p class="roll-label">Your roll</p>
+        <h3 id="pokemonName">Press an emoji to start</h3>
+        <p id="pokemonMeta">Type and rarity will appear here.</p>
+      </article>
+    </div>
+  </section>
+
   <!-- LINKS -->
   <section id="links" class="section">
     <div class="container">
@@ -123,6 +148,77 @@
   <footer class="footer">
     <p>© 2026 Spawn Seven · Official SevenPoke Community</p>
   </footer>
+
+  <script>
+    const pokemonPool = [
+      { name: 'Charmander', type: 'fire', rarity: 'Common' },
+      { name: 'Vulpix', type: 'fire', rarity: 'Common' },
+      { name: 'Growlithe', type: 'fire', rarity: 'Uncommon' },
+      { name: 'Cyndaquil', type: 'fire', rarity: 'Uncommon' },
+      { name: 'Magikarp', type: 'water', rarity: 'Common' },
+      { name: 'Psyduck', type: 'water', rarity: 'Common' },
+      { name: 'Squirtle', type: 'water', rarity: 'Uncommon' },
+      { name: 'Lapras', type: 'water', rarity: 'Rare' },
+      { name: 'Bulbasaur', type: 'grass', rarity: 'Uncommon' },
+      { name: 'Oddish', type: 'grass', rarity: 'Common' },
+      { name: 'Bellsprout', type: 'grass', rarity: 'Common' },
+      { name: 'Treecko', type: 'grass', rarity: 'Uncommon' },
+      { name: 'Pikachu', type: 'electric', rarity: 'Uncommon' },
+      { name: 'Mareep', type: 'electric', rarity: 'Common' },
+      { name: 'Shinx', type: 'electric', rarity: 'Common' },
+      { name: 'Electabuzz', type: 'electric', rarity: 'Rare' },
+      { name: 'Swinub', type: 'ice', rarity: 'Common' },
+      { name: 'Spheal', type: 'ice', rarity: 'Common' },
+      { name: 'Sneasel', type: 'ice', rarity: 'Uncommon' },
+      { name: 'Snorunt', type: 'ice', rarity: 'Uncommon' },
+      { name: 'Geodude', type: 'rock', rarity: 'Common' },
+      { name: 'Onix', type: 'rock', rarity: 'Uncommon' },
+      { name: 'Rhyhorn', type: 'rock', rarity: 'Uncommon' },
+      { name: 'Larvitar', type: 'rock', rarity: 'Rare' },
+      { name: 'Articuno', type: 'ice', rarity: 'Legendary' },
+      { name: 'Zapdos', type: 'electric', rarity: 'Legendary' },
+      { name: 'Moltres', type: 'fire', rarity: 'Legendary' }
+    ];
+
+    const typeEmoji = {
+      fire: '🔥',
+      water: '💧',
+      grass: '🌿',
+      electric: '⚡',
+      ice: '❄️',
+      rock: '🪨'
+    };
+
+    const buttons = document.querySelectorAll('.emoji-btn');
+    const nameEl = document.getElementById('pokemonName');
+    const metaEl = document.getElementById('pokemonMeta');
+    const resultCard = document.getElementById('rollResult');
+
+    function getRandomPokemon(type) {
+      const source = type === 'any'
+        ? pokemonPool
+        : pokemonPool.filter(function (pokemon) {
+            return pokemon.type === type;
+          });
+
+      return source[Math.floor(Math.random() * source.length)];
+    }
+
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        const type = button.getAttribute('data-type');
+        const roll = getRandomPokemon(type);
+        const emoji = type === 'any' ? '⚪🔴' : typeEmoji[roll.type];
+
+        nameEl.textContent = emoji + ' ' + roll.name;
+        metaEl.textContent = 'Type: ' + roll.type.charAt(0).toUpperCase() + roll.type.slice(1) + ' | Rarity: ' + roll.rarity;
+
+        resultCard.classList.remove('roll-pop');
+        void resultCard.offsetWidth;
+        resultCard.classList.add('roll-pop');
+      });
+    });
+  </script>
 
 </body>
 </html>

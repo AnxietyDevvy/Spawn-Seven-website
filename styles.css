@@ -311,6 +311,87 @@ a {
   flex-shrink: 0;
 }
 
+/* ===== POKEMON ROLL ===== */
+.roll-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto 1.4rem;
+}
+
+.emoji-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.emoji-btn {
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.emoji-btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--blurple);
+  box-shadow: 0 8px 20px #5865f240;
+}
+
+.emoji-btn-ball {
+  min-width: 84px;
+  font-size: 1.2rem;
+  letter-spacing: -0.1em;
+}
+
+.roll-result {
+  max-width: 620px;
+  margin: 0 auto;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  padding: 1.2rem 1rem;
+}
+
+.roll-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.roll-result h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.roll-result p {
+  color: var(--text-secondary);
+}
+
+.roll-pop {
+  animation: rollPop 220ms ease-out;
+}
+
+@keyframes rollPop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 /* ===== LINKS ===== */
 .links-grid {
   display: flex;
@@ -401,5 +482,9 @@ a {
 
   .nav-links a:not(.btn) {
     display: none;
+  }
+
+  .emoji-btn-ball {
+    min-width: 74px;
   }
 }
