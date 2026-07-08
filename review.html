@@ -52,10 +52,21 @@
   </main>
 
   <script>
+    const SITE_VISITS_KEY = 'spawnseven_site_visits';
+    const REVIEW_COUNT_KEY = 'spawnseven_review_submits';
+
+    function incrementCounter(key) {
+      const current = Number(localStorage.getItem(key) || '0');
+      localStorage.setItem(key, String(current + 1));
+    }
+
+    incrementCounter(SITE_VISITS_KEY);
+
     const form = document.getElementById('reviewForm');
     const success = document.getElementById('success');
 
     form.addEventListener('submit', function (event) {
+      incrementCounter(REVIEW_COUNT_KEY);
       success.hidden = false;
       setTimeout(function () {
         form.reset();

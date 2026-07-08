@@ -47,8 +47,10 @@
         </article>
 
         <article class="tile">
-          <h3>Status</h3>
-          <p id="sessionStatus">Authenticated</p>
+          <h3>Analytics</h3>
+          <p>Site visits: <strong id="metricVisits">0</strong></p>
+          <p>Reviews submitted: <strong id="metricReviews">0</strong></p>
+          <p>Server link clicks: <strong id="metricServerClicks">0</strong></p>
         </article>
       </div>
     </section>
@@ -59,6 +61,9 @@
     const AUTH_KEY = 'spawnseven_dashboard_auth';
     const ATTEMPT_KEY = 'spawnseven_dashboard_attempts';
     const LOCKED_KEY = 'spawnseven_dashboard_locked';
+    const SITE_VISITS_KEY = 'spawnseven_site_visits';
+    const REVIEW_COUNT_KEY = 'spawnseven_review_submits';
+    const SERVER_CLICKS_KEY = 'spawnseven_server_clicks';
     const MAX_ATTEMPTS = 3;
 
     const authCard = document.getElementById('authCard');
@@ -68,6 +73,19 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const authError = document.getElementById('authError');
     const lockoutMsg = document.getElementById('lockoutMsg');
+    const metricVisits = document.getElementById('metricVisits');
+    const metricReviews = document.getElementById('metricReviews');
+    const metricServerClicks = document.getElementById('metricServerClicks');
+
+    function readCount(key) {
+      return Number(localStorage.getItem(key) || '0');
+    }
+
+    function refreshMetrics() {
+      metricVisits.textContent = String(readCount(SITE_VISITS_KEY));
+      metricReviews.textContent = String(readCount(REVIEW_COUNT_KEY));
+      metricServerClicks.textContent = String(readCount(SERVER_CLICKS_KEY));
+    }
 
     function getAttempts() {
       return Number(localStorage.getItem(ATTEMPT_KEY) || '0');
@@ -106,6 +124,7 @@
       dashboardPanel.hidden = false;
       authError.hidden = true;
       lockoutMsg.hidden = true;
+      refreshMetrics();
     }
 
     function showAuth() {
