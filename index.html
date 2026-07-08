@@ -146,6 +146,19 @@
     </div>
   </section>
 
+  <!-- LIVE SUPPORT WIDGET -->
+  <button id="supportLauncher" class="support-launcher" aria-label="Open live support">💬 Need Help?</button>
+
+  <aside id="supportPanel" class="support-panel" aria-label="Live support panel" hidden>
+    <div class="support-panel-head">
+      <h3>Live Support</h3>
+      <button id="supportClose" class="support-close" aria-label="Close live support">×</button>
+    </div>
+    <p>If something is not working, message us in Discord and a staff member can help in real time.</p>
+    <a class="btn btn-primary support-action" href="https://discord.gg/yU9Uv5yzqP" target="_blank">Open Discord Support</a>
+    <a class="support-secondary" href="review.html">Leave feedback instead</a>
+  </aside>
+
   <!-- FOOTER -->
   <footer class="footer">
     <p>© 2026 Spawn Seven · Official SevenPoke Community</p>
@@ -197,8 +210,24 @@
     const resultCard = document.getElementById('rollResult');
     const spriteEl = document.getElementById('pokemonSprite');
     const cooldownText = document.getElementById('cooldownText');
+    const supportLauncher = document.getElementById('supportLauncher');
+    const supportPanel = document.getElementById('supportPanel');
+    const supportClose = document.getElementById('supportClose');
     const cooldownDuration = 3;
     let isCooldownActive = false;
+
+    function toggleSupportPanel(showPanel) {
+      supportPanel.hidden = !showPanel;
+      supportLauncher.setAttribute('aria-expanded', showPanel ? 'true' : 'false');
+    }
+
+    supportLauncher.addEventListener('click', function () {
+      toggleSupportPanel(supportPanel.hidden);
+    });
+
+    supportClose.addEventListener('click', function () {
+      toggleSupportPanel(false);
+    });
 
     function playRollSound() {
       try {
@@ -304,6 +333,12 @@
 
         startCooldown();
       });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !supportPanel.hidden) {
+        toggleSupportPanel(false);
+      }
     });
   </script>
 
