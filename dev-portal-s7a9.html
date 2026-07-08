@@ -19,7 +19,7 @@
       <input id="passwordInput" type="password" placeholder="Enter password" autocomplete="current-password" />
       <button id="unlockBtn" class="btn">Unlock Dashboard</button>
       <p id="authError" class="error" hidden>Incorrect password.</p>
-      <p id="lockoutMsg" class="error" hidden>Too many failed attempts. Try again in 60s.</p>
+      <p id="lockoutMsg" class="error" hidden>Too many failed attempts. Access permanently locked on this browser.</p>
       <a class="back-link" href="index.html">Back to main site</a>
     </section>
 
@@ -58,9 +58,8 @@
     const DEV_PASSWORD = 'Froggert';
     const AUTH_KEY = 'spawnseven_dashboard_auth';
     const ATTEMPT_KEY = 'spawnseven_dashboard_attempts';
-    const LOCK_UNTIL_KEY = 'spawnseven_dashboard_lock_until';
+    const LOCKED_KEY = 'spawnseven_dashboard_locked';
     const MAX_ATTEMPTS = 3;
-    const LOCKOUT_MS = 60 * 1000;
 
     const authCard = document.getElementById('authCard');
     const dashboardPanel = document.getElementById('dashboardPanel');
@@ -70,34 +69,36 @@
     const authError = document.getElementById('authError');
     const lockoutMsg = document.getElementById('lockoutMsg');
 
-    let lockoutInterval = null;
-
     function getAttempts() {
-      return Number(sessionStorage.getItem(ATTEMPT_KEY) || '0');
+      return Number(localStorage.getItem(ATTEMPT_KEY) || '0');
     }
 
     function setAttempts(value) {
-      sessionStorage.setItem(ATTEMPT_KEY, String(value));
+      localStorage.setItem(ATTEMPT_KEY, String(value));
     }
 
-    function getLockUntil() {
-      return Number(sessionStorage.getItem(LOCK_UNTIL_KEY) || '0');
+    function isLocked() {
+      return localStorage.getItem(LOCKED_KEY) === 'true';
     }
 
-    function setLockUntil(value) {
-      sessionStorage.setItem(LOCK_UNTIL_KEY, String(value));
+    function setLocked(value) {
+      localStorage.setItem(LOCKED_KEY, value ? 'true' : 'false');
     }
 
-    function clearLockout() {
+    function clearFailedState() {
       setAttempts(0);
-      setLockUntil(0);
+      setLocked(false);
       lockoutMsg.hidden = true;
       unlockBtn.disabled = false;
       passwordInput.disabled = false;
-      if (lockoutInterval) {
-        clearInterval(lockoutInterval);
-        lockoutInterval = null;
-      }
+    }
+
+    function applyPermanentLock() {
+      setLocked(true);
+      lockoutMsg.textContent = 'Too many failed attempts. Access permanently locked on this browser.';
+      lockoutMsg.hidden = false;
+      unlockBtn.disabled = true;
+      passwordInput.disabled = true;
     }
 
     function showDashboard() {
@@ -113,47 +114,14 @@
       passwordInput.value = '';
     }
 
-    function updateLockoutView() {
-      const now = Date.now();
-      const lockUntil = getLockUntil();
-
-      if (lockUntil <= now) {
-        clearLockout();
-        return;
-      }
-
-      const secondsLeft = Math.max(1, Math.ceil((lockUntil - now) / 1000));
-      lockoutMsg.textContent = 'Too many failed attempts. Try again in ' + secondsLeft + 's.';
-      lockoutMsg.hidden = false;
-      unlockBtn.disabled = true;
-      passwordInput.disabled = true;
-    }
-
-    function startLockout() {
-      setLockUntil(Date.now() + LOCKOUT_MS);
-      updateLockoutView();
-
-      if (lockoutInterval) {
-        clearInterval(lockoutInterval);
-      }
-
-      lockoutInterval = setInterval(function () {
-        updateLockoutView();
-        if (getLockUntil() <= Date.now()) {
-          clearInterval(lockoutInterval);
-          lockoutInterval = null;
-        }
-      }, 1000);
-    }
-
     function unlock() {
-      if (getLockUntil() > Date.now()) {
-        updateLockoutView();
+      if (isLocked()) {
+        applyPermanentLock();
         return;
       }
 
       if (passwordInput.value === DEV_PASSWORD) {
-        clearLockout();
+        clearFailedState();
         sessionStorage.setItem(AUTH_KEY, 'true');
         showDashboard();
       } else {
@@ -162,7 +130,7 @@
         setAttempts(nextAttempts);
 
         if (nextAttempts >= MAX_ATTEMPTS) {
-          startLockout();
+          applyPermanentLock();
         }
       }
     }
@@ -184,9 +152,8 @@
       showDashboard();
     } else {
       showAuth();
-      updateLockoutView();
-      if (getLockUntil() > Date.now()) {
-        startLockout();
+      if (isLocked()) {
+        applyPermanentLock();
       }
     }
   </script>
