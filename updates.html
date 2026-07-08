@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Server Updates | Spawn Seven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .updates-wrap {
+      max-width: 900px;
+      margin: 90px auto 40px;
+      padding: 0 16px;
+    }
+
+    .updates-title {
+      margin-bottom: 6px;
+      font-size: clamp(2rem, 4.8vw, 3rem);
+      font-weight: 900;
+    }
+
+    .updates-sub {
+      margin-bottom: 20px;
+      color: var(--text-secondary);
+    }
+
+    .updates-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .update-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .update-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    .update-meta {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .update-card p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .updates-back {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .updates-back:hover {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">Spawn Seven</span>
+      <a href="dev-portal-s7a9.html" class="dev-hotspot" aria-label="Developer portal"></a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="review.html">Leave a Review</a>
+      <a href="https://discord.gg/yU9Uv5yzqP" class="btn btn-primary" target="_blank">Join Server</a>
+    </div>
+  </nav>
+
+  <main class="updates-wrap">
+    <h1 class="updates-title">Server Updates</h1>
+    <p class="updates-sub">This is an extra page added without replacing your homepage.</p>
+
+    <section class="updates-list">
+      <article class="update-card">
+        <h3>Feature: Emoji Pokemon Roll</h3>
+        <p class="update-meta">Published recently</p>
+        <p>Added emoji-based random Pokemon rolls with cooldown, animation, and sprite reveal.</p>
+      </article>
+
+      <article class="update-card">
+        <h3>Feature: Review Page</h3>
+        <p class="update-meta">Published recently</p>
+        <p>Added review page and connected submission flow to your Google Form.</p>
+      </article>
+
+      <article class="update-card">
+        <h3>Developer Portal</h3>
+        <p class="update-meta">Private route</p>
+        <p>Developer-only portal is available through a direct URL route for internal use.</p>
+      </article>
+    </section>
+
+    <a class="updates-back" href="index.html">← Back to Homepage</a>
+  </main>
+</body>
+</html>
