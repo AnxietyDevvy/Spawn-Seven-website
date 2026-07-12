@@ -23,10 +23,19 @@
       <a href="#server-events">Server Events</a>
       <a href="#poke-roll">Poke Roll</a>
       <a href="#links">Links</a>
-      <a href="review.html">Leave a Review</a>
-      <a href="https://discord.gg/yU9Uv5yzqP" class="btn btn-primary" target="_blank">Join Server</a>
+      <a href="review.html" class="review-link">Leave a Review</a>
+      <a href="https://discord.gg/yU9Uv5yzqP" class="btn btn-primary join-link" target="_blank">Join Server</a>
     </div>
   </nav>
+
+  <div class="server-status-card" aria-label="Server membership selection">
+    <p class="server-status-title">Are you already in the server?</p>
+    <div class="server-status-buttons">
+      <button class="status-btn" type="button" data-status="member">Yes, I’m already in</button>
+      <button class="status-btn" type="button" data-status="visitor">No, not yet</button>
+    </div>
+    <p class="server-status-note" id="serverStatusNote">Choose an option to tailor the links on this page.</p>
+  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -77,6 +86,11 @@
       <h2 class="section-title">What We Offer</h2>
       <ul class="features-list">
         <li><span class="check">✔</span> Official support for the SevenPoke naming bot</li>
+        <li><span class="check">✔</span> Giveaways</li>
+        <li><span class="check">✔</span> 200 channel mass incense runs</li>
+        <li><span class="check">✔</span> Ghosty Bot and Dank Memer</li>
+        <li><span class="check">✔</span> Starboards for Rares, Regionals, Shinnies, Events, and high/low IV catches</li>
+        <li><span class="check">✔</span> Name colours and level-up achievements</li>
         <li><span class="check">✔</span> Active Pokétwo community</li>
         <li><span class="check">✔</span> Bot updates and announcements</li>
         <li><span class="check">✔</span> Tips and guides for Pokétwo players</li>
@@ -117,7 +131,7 @@
       <h2 class="section-title">Links</h2>
       <div class="links-grid">
 
-        <a href="https://discord.gg/yU9Uv5yzqP" class="link-card" target="_blank">
+        <a href="https://discord.gg/yU9Uv5yzqP" class="link-card join-link" target="_blank">
           <div class="link-icon">💬</div>
           <div class="link-info">
             <h3>Discord Server</h3>
@@ -135,7 +149,7 @@
           <span class="link-arrow">→</span>
         </a>
 
-        <a href="review.html" class="link-card">
+        <a href="review.html" class="link-card review-link">
           <div class="link-icon">⭐</div>
           <div class="link-info">
             <h3>Leave a Review</h3>
@@ -172,6 +186,37 @@
     </div>
   </section>
 
+  <!-- SPECIAL NOTE -->
+  <section class="section">
+    <div class="container">
+      <div class="note-card">
+        <h2 class="section-title">Special Note</h2>
+        <p class="note-intro">If you have found this note then you must be very lucky, only a few have found notes such as these.</p>
+        <p class="note-intro">We need your help solving a sentence, a sentence that has been lost for centuries, a sentence strong enough to spawn rare treasures and values. But, there are rules that are in place, break these rules and your chance for a piece of treasure will be lost in the drift of the wind. The rules are as such:</p>
+
+        <h3 class="note-subtitle">Rules</h3>
+        <ul class="note-list">
+          <li>Once you discover this sentence, you may NOT share it with others. ONLY with the note holders (the staff team)</li>
+          <li>Once the sentence is discovered, you can not say you knew and you are eligible to win, because you never told the persons who hold this note</li>
+          <li>You may NOT beg for treasures</li>
+          <li>You may NOT throw a fit if you did not find the word.</li>
+        </ul>
+
+        <h3 class="note-subtitle">How it works</h3>
+        <ul class="note-list">
+          <li>There are 5 winning spots.</li>
+          <li>First place: Nitro / A shiny (Winner's choice)</li>
+          <li>Second place: A free res slot of their choice</li>
+          <li>Third place: 150k pc</li>
+          <li>Fourth place: 75k pc</li>
+          <li>Fifth place: 40k pc / Redeem</li>
+        </ul>
+
+        <p class="note-hint">Hint: There will be random words scattered around to help you discover the sentence.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <p>© 2026 Spawn Seven · Official SevenPoke Community</p>
@@ -191,6 +236,46 @@
     document.querySelectorAll('a[href*="discord.gg/yU9Uv5yzqP"]').forEach(function (link) {
       link.addEventListener('click', function () {
         incrementCounter(SERVER_CLICKS_KEY);
+      });
+    });
+
+    const statusButtons = document.querySelectorAll('.status-btn');
+    const statusNote = document.getElementById('serverStatusNote');
+    const statusStorageKey = 'spawnseven_server_status';
+
+    function updateServerStatus(status) {
+      document.body.dataset.serverStatus = status;
+      localStorage.setItem(statusStorageKey, status);
+
+      statusButtons.forEach(function (button) {
+        button.classList.toggle('active', button.dataset.status === status);
+      });
+
+      document.querySelectorAll('.join-link').forEach(function (element) {
+        element.classList.toggle('is-hidden', status === 'member');
+      });
+
+      document.querySelectorAll('.review-link').forEach(function (element) {
+        element.classList.toggle('is-hidden', status === 'visitor');
+      });
+
+      if (status === 'member') {
+        statusNote.textContent = 'Thanks for being part of the server. The join link is hidden for now.';
+      } else if (status === 'visitor') {
+        statusNote.textContent = 'The review link is hidden for now. Join the server first if you want to leave feedback.';
+      } else {
+        statusNote.textContent = 'Choose an option to tailor the links on this page.';
+      }
+    }
+
+    const savedStatus = localStorage.getItem(statusStorageKey);
+    if (savedStatus === 'member' || savedStatus === 'visitor') {
+      updateServerStatus(savedStatus);
+    }
+
+    statusButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        updateServerStatus(button.dataset.status);
       });
     });
 
